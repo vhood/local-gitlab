@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  gitlab:
+    image: "gitlab/gitlab-ce:latest"
+    restart: "always"
+    hostname: "${DOMAIN}"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '${PROTOCOL}://${DOMAIN}'
+        gitlab_rails['gitlab_shell_ssh_port'] = ${SSH_PORT}
+        # Add any other gitlab.rb configuration here, each on its own line
+      GITLAB_ROOT_PASSWORD: "${ROOT_PASSWORD}"
+    ports:
+      - "${HTTP_PORT}:80"
+      - "${HTTPS_PORT}:443"
+      - "${SSH_PORT}:22"
+    networks:
+      - "gitlab"
+    volumes:
+      - "${GITLAB_VOLUME}/config:/etc/gitlab"
+      - "${GITLAB_VOLUME}/logs:/var/log/gitlab"
+      - "${GITLAB_VOLUME}/data:/var/opt/gitlab"
+      - "${GITLAB_VOLUME}/runner:/etc/gitlab-runner"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  gitlab-runner:
+    image: "gitlab/gitlab-runner:latest"
+    restart: "always"
+    networks:
+      - "gitlab"
+    volumes:
+      - "${GITLAB_VOLUME}/runner:/etc/gitlab-runner"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+networks:
+  gitlab:
