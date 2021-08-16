@@ -1,17 +1,19 @@
-init:
-	@docker-compose build &&\
-	cp .env-example .env
+config:
+	@cp .env-example .env
 
 up:
-	@docker-compose up -d
+	@docker-compose up --build -d
 
 down:
-	@docker-compose down --remove-orphans
+	@docker-compose down --remove-orphans -v
 
 restart: down up
 
 shell:
 	@docker-compose exec gitlab /bin/bash
+
+rails-console:
+	@docker-compose exec gitlab gitlab-rails console
 
 watch:
 	@docker-compose logs -f gitlab

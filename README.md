@@ -2,16 +2,23 @@
 
 This is a simple GitLab environment built with docker-compose.
 
+## Requirements
+
+* docker-compose 1.6.0+
+* docker 1.10.0+
+
 ## Usage
 
 Follow the steps below to start:
 
-1. `$ make init` - pull images and make **.env** file
+1. `$ make config` - create **.env** file from the example
 2. Setup environments in **.env** file
 3. `$ make up` - up the containers
 
-GitLab will run installation scripts in silent mode, wait until it will be available at the address you have configured.
-You can watch the progress with `make watch` command.
+GitLab will run installation scripts in a silent mode,  
+the address you have configured will redirect you to a login page after all done.
+
+You can watch the progress (online logs) with `make watch` command.
 
 ### GitLab Runner
 
@@ -21,10 +28,23 @@ Runners config will be `./volume/runner/config.toml`.
 
 ### Available Makefile commands
 
-* `init` - pull images and make **.env** file
+* `config` - create **.env** file from **.env-example**
 * `up` - up the containers
 * `down` - down the containers
 * `restart` - restart the containers
 * `shell` - connect to the gitlab container
+* `rails-console` - connect to the gitlab-rails console
 * `watch` - watch the gitlab container logs
 * `runner` - register a new gitlab runner
+
+## Troubleshooting
+
+### Invalid login or password for user "root"
+
+The user "root" is created  automatically only if you send a correct GITLAB_ROOT_PASSWORD environment **on the first gitlab container start**.  
+If you doesn't, you have to remove all volume data manually and then up the container again.
+
+You can check the root user exists by rails console:
+
+* `make rails-console`
+* `User.where(username: "root").first` - get the root user object
