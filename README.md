@@ -48,3 +48,18 @@ You can check the root user exists by rails console:
 
 * `make rails-console`
 * `User.where(username: "root").first` - get the root user object
+
+### Runner could not resolve host
+
+If you register a runner and this runner jobs failed with fatal error "Could not resolve host", add current gitlab network from docker-compose to the runner in `./volume/runner/config.toml` like this
+
+```toml
+# ...
+[[runners]]
+  # ...
+  [runners.docker]
+    # ...
+    network_mode = "local-gitlab_gitlab"
+```
+
+You can check docker networks with command `docker network ls`
