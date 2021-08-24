@@ -9,11 +9,14 @@ This is a simple GitLab environment built with docker-compose.
 
 ## Usage
 
+> The **make** utility is used in this documentation.  
+Install it or use commands from the ./Makefile.
+
 Follow the steps below to start:
 
-1. `$ make config` - create **.env** file from the example
+1. `make config` - create **.env** file from the example
 2. Setup environments in **.env** file
-3. `$ make up` - up the containers
+3. `make up` - up the containers
 
 GitLab will run installation scripts in a silent mode,  
 the address you have configured will redirect you to a login page after all done.
@@ -22,7 +25,7 @@ You can watch the progress (online logs) with `make watch` command.
 
 ### GitLab Runner
 
-`$ make runner` - register a new runner.
+`make runner` - register a new runner.
 
 Runners config will be `./volume/runner/config.toml`.
 
